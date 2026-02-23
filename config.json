@@ -1,0 +1,41 @@
+{
+  "fortnite": {
+    "PAGE_TITLE": "V-Buck GiveAway - Play & Earn",
+    "GAME_NAME": "Fortnite",
+    "GAME_CURRENCY": "V-Bucks",
+    "PLAYER_COUNT": "500k+",
+    "REWARD_POINTS": "10,000",
+    "HERO_IMAGE": "https://lh3.googleusercontent.com/aida-public/AB6AXuAtzsBTGgka9O0PPgrYr1JLOOz05r1rVQbtTm1qpPQwgBtM09h6BxdQGry1561_evg9hJ4qagUnTUc9i7KB6oM9puN8E60_hL1VYUpZfmQ3haPoO5HuW8xzMe2UTDUDxai7yRLuJQ6gcjLmtKONU5Zj3Fiihxo6HrLEZ1WNvPF_tv4rk8EbbaTP-wRhv7SsSgu_zxRt1-aIeXfFar8SXbQF9JE49nd4-3HntKK8Nyr0BfRAeVo8wLdBR_Htab_G0E_2bfaojADYFw",
+    "CHALLENGE_TEXT": "Reach Level 10 in Fortnite",
+    "CHALLENGE_SUBTEXT": "Complete this milestone in the current season.",
+    "CTA_TEXT": "CLAIM YOUR V-BUCKS",
+    "JOIN_CTA_TEXT": "Join Challenge",
+    "DISCLAIMER": "Disclaimer: This platform is not affiliated with, maintained, authorized, endorsed, or sponsored by Epic Games, Inc. Fortnite is a registered trademark of Epic Games, Inc. Terms and conditions apply. All rewards are subject to availability."
+  },
+  "roblox": {
+    "PAGE_TITLE": "Robux GiveAway - Play & Earn",
+    "GAME_NAME": "Roblox",
+    "GAME_CURRENCY": "Robux",
+    "PLAYER_COUNT": "1M+",
+    "REWARD_POINTS": "5,000",
+    "HERO_IMAGE": "https://images.rbxcdn.com/f04c4b69-8e43-424a-a034-7a918a032f91/Social_Banner.png",
+    "CHALLENGE_TEXT": "Complete Obby Masters",
+    "CHALLENGE_SUBTEXT": "Reach the final level in the official challenge.",
+    "CTA_TEXT": "CLAIM YOUR ROBUX",
+    "JOIN_CTA_TEXT": "Start Obby",
+    "DISCLAIMER": "Disclaimer: This platform is not affiliated with Roblox Corporation. Roblox and Robux are registered trademarks of Roblox Corporation."
+  },
+  "pubg": {
+    "PAGE_TITLE": "G-Coin GiveAway - Play & Earn",
+    "GAME_NAME": "PUBG",
+    "GAME_CURRENCY": "G-Coins",
+    "PLAYER_COUNT": "250k+",
+    "REWARD_POINTS": "2,500",
+    "HERO_IMAGE": "https://wstatic-prod.pubg.com/web/live/static/og/og-image-pubg.jpg",
+    "CHALLENGE_TEXT": "Winner Winner Chicken Dinner",
+    "CHALLENGE_SUBTEXT": "Get 1 win in ranked mode today.",
+    "CTA_TEXT": "CLAIM G-COINS",
+    "JOIN_CTA_TEXT": "Enter Battle",
+    "DISCLAIMER": "Disclaimer: This platform is not affiliated with KRAFTON, Inc. PUBG is a registered trademark of KRAFTON, Inc."
+  }
+}
