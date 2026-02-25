@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>V-Buck GiveAway - Play &amp; Earn</title>
+    <title id="page-title">V-Buck GiveAway - Play &amp; Earn</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="style.css?v=3" rel="stylesheet" />
     <link
       href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700;800;900&amp;display=swap"
       rel="stylesheet"
@@ -19,11 +20,11 @@
         theme: {
           extend: {
             colors: {
-              primary: "#5c33cc",
-              "neon-cyan": "#00E5FF",
-              gold: "#FFD700",
-              "background-light": "#f6f6f8",
-              "background-dark": "#121212",
+              primary: "var(--color-primary)",
+              "neon-cyan": "var(--color-neon-cyan)",
+              gold: "var(--color-gold)",
+              "background-light": "var(--color-bg-light)",
+              "background-dark": "var(--color-bg-dark)",
             },
             fontFamily: {
               display: ["Spline Sans", "sans-serif"],
@@ -38,44 +39,6 @@
         },
       };
     </script>
-    <style type="text/tailwindcss">
-      :root {
-        --glow-cyan: 0 0 20px rgba(0, 229, 255, 0.4);
-        --glow-purple: 0 0 30px rgba(92, 51, 204, 0.3);
-        --strong-glow-cyan: 0 0 35px rgba(0, 229, 255, 0.6);
-      }
-      body {
-        font-family: "Spline Sans", sans-serif;
-        background-color: #0d0d0e;
-        min-height: max(884px, 100dvh);
-      }
-      @media (min-width: 768px) {
-        body {
-          background-image: radial-gradient(
-            circle at 50% -20%,
-            #1c1942 0%,
-            #0d0d0e 80%
-          );
-        }
-      }
-      .glow-cyan {
-        box-shadow: var(--glow-cyan);
-      }
-      .glow-purple {
-        box-shadow: var(--glow-purple);
-      }
-      .strong-glow-cyan {
-        box-shadow: var(--strong-glow-cyan);
-      }
-      .text-stroke-neon {
-        -webkit-text-stroke: 1px rgba(0, 225, 255, 0.3);
-      }
-    </style>
-    <style>
-      body {
-        min-height: 100dvh;
-      }
-    </style>
   </head>
   <body
     class="bg-background-light dark:bg-background-dark text-white min-h-screen"
@@ -104,6 +67,7 @@
             >
           </div>
           <h2
+            id="site-title"
             class="text-white text-lg md:text-xl font-black leading-tight tracking-tight flex-1 md:flex-none text-center md:text-left italic uppercase"
           >
             V-Buck GiveAway
@@ -111,7 +75,7 @@
         </div>
 
         <!-- Desktop Navigation (Hidden on Mobile) -->
-        <nav class="hidden md:flex items-center gap-8">
+        <nav class="md:flex items-center gap-8">
           <a
             href="#"
             class="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-colors"
@@ -132,9 +96,10 @@
         <!-- Profile/Auth Actions -->
         <div class="flex items-center gap-4">
           <!-- Desktop Buttons -->
-          <div class="hidden md:flex items-center gap-6">
+          <div class=" md:flex items-center gap-6">
             <button
-              class="px-8 py-3 rounded-full bg-primary text-xs font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-105 transition-transform"
+              data-action="signup"
+              class="px-8 py-3 rounded-full bg-primary text-xs font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-105 transition-transform cursor-pointer"
             >
               Sign Up
             </button>
@@ -157,8 +122,9 @@
               class="absolute -inset-1 bg-gradient-to-r from-primary to-neon-cyan rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"
             ></div>
             <div
+              id="index-hero-image"
               class="relative w-full bg-center bg-no-repeat aspect-[4/3] lg:aspect-square bg-cover rounded-xl border border-white/10 shadow-2xl"
-              data-alt="Fortnite hero character with neon glow"
+              data-alt="Hero character with neon glow"
               style="
                 background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuAtzsBTGgka9O0PPgrYr1JLOOz05r1rVQbtTm1qpPQwgBtM09h6BxdQGry1561_evg9hJ4qagUnTUc9i7KB6oM9puN8E60_hL1VYUpZfmQ3haPoO5HuW8xzMe2UTDUDxai7yRLuJQ6gcjLmtKONU5Zj3Fiihxo6HrLEZ1WNvPF_tv4rk8EbbaTP-wRhv7SsSgu_zxRt1-aIeXfFar8SXbQF9JE49nd4-3HntKK8Nyr0BfRAeVo8wLdBR_Htab_G0E_2bfaojADYFw&quot;);
               "
@@ -186,6 +152,7 @@
                 </div>
               </div>
               <h1
+                id="index-hero-headline"
                 class="text-white text-5xl md:text-6xl lg:text-7xl font-black leading-[0.95] lg:leading-[0.9] tracking-tighter uppercase italic"
               >
                 Play Fortnite.<br />
@@ -194,6 +161,7 @@
                 >
               </h1>
               <p
+                id="index-hero-subheadline"
                 class="text-gray-400 text-lg md:text-xl font-medium leading-tight lg:leading-snug max-w-[90%] lg:max-w-md"
               >
                 The world's #1 reward platform for Fortnite players. Complete
@@ -206,9 +174,10 @@
               class="flex flex-col md:flex-row md:items-center gap-8 lg:mt-4"
             >
               <button
+                data-action="signup"
                 class="glow-cyan flex min-w-[240px] lg:min-w-[280px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-16 lg:h-18 px-8 lg:px-10 bg-neon-cyan text-background-dark text-xl lg:text-2xl font-black leading-normal tracking-wide uppercase hover:scale-105 transition-transform active:scale-95 shadow-lg shadow-neon-cyan/20"
               >
-                <span class="truncate">CLAIM YOUR V-BUCKS</span>
+                <span id="index-cta-text" class="truncate">CLAIM YOUR V-BUCKS</span>
               </button>
 
               <!-- Social Proof (Desktop Only or Responsive) -->
@@ -392,7 +361,8 @@
                 </div>
               </div>
               <button
-                class="w-full h-14 md:h-16 rounded-full bg-white text-primary font-black uppercase text-sm md:text-base tracking-widest hover:bg-gray-100 transition-all hover:shadow-xl active:scale-[0.98]"
+                data-action="signup"
+                class="w-full h-14 md:h-16 rounded-full bg-white text-primary font-black uppercase text-sm md:text-base tracking-widest hover:bg-gray-100 transition-all hover:shadow-xl active:scale-[0.98] cursor-pointer"
               >
                 Join Challenge
               </button>
@@ -494,12 +464,15 @@
         class="fixed bottom-6 left-0 right-0 px-6 z-50 pointer-events-none max-w-[480px] mx-auto md:hidden"
       >
         <button
-          class="pointer-events-auto w-full h-16 bg-neon-cyan text-background-dark font-black uppercase tracking-[0.15em] rounded-full strong-glow-cyan flex items-center justify-center gap-3 border-2 border-white/20 active:scale-95 transition-transform"
+          data-action="signup"
+          class="pointer-events-auto w-full h-16 bg-neon-cyan text-background-dark font-black uppercase tracking-[0.15em] rounded-full strong-glow-cyan flex items-center justify-center gap-3 border-2 border-white/20 active:scale-95 transition-transform cursor-pointer"
         >
           <span class="text-lg">Join Now</span>
           <span class="material-symbols-outlined text-2xl">trending_flat</span>
         </button>
       </div>
     </div>
+
+    <script src="script.js"></script>
   </body>
 </html>

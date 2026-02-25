@@ -1,0 +1,102 @@
+/* Custom Styles - Unified CSS for both LP pages */
+
+:root {
+  --color-primary: #359EFF;
+  --color-neon-cyan: #00E5FF;
+  --color-gold: #00E5FF;
+  --color-bg-dark: #0f1923;
+  --color-bg-light: #f5f7f8;
+  --glow-cyan: 0 0 20px rgba(0, 229, 255, 0.4);
+  --glow-purple: 0 0 30px rgba(53, 158, 255, 0.3);
+  --strong-glow-cyan: 0 0 35px rgba(0, 229, 255, 0.6);
+}
+
+body {
+  font-family: "Spline Sans", sans-serif;
+  background-color: var(--color-bg-dark);
+  min-height: 100dvh;
+}
+
+@media (min-width: 768px) {
+  body {
+    background-image: radial-gradient(
+      circle at 50% -20%,
+      #1c1942 0%,
+      var(--color-bg-dark) 80%
+    );
+  }
+}
+
+/* Utilities */
+.glow-cyan {
+  box-shadow: var(--glow-cyan);
+}
+
+.glow-gold {
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+}
+
+.glow-purple {
+  box-shadow: var(--glow-purple);
+}
+
+.strong-glow-cyan {
+  box-shadow: var(--strong-glow-cyan);
+}
+
+.text-stroke-neon {
+  -webkit-text-stroke: 1px rgba(0, 225, 255, 0.3);
+}
+
+.input-focus-gold:focus {
+  border-color: var(--color-gold);
+  --tw-ring-color: var(--color-gold);
+}
+
+/* Input focus using primary color */
+.input-focus-primary:focus {
+  border-color: var(--color-primary);
+  --tw-ring-color: var(--color-primary);
+}
+
+/* Animations */
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+/* Reward Animation Overlay */
+.reward-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 100;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.coin-shower {
+  font-size: 4rem;
+  animation: bounce 0.5s infinite;
+}
+
+.hidden {
+  display: none !important;
+}

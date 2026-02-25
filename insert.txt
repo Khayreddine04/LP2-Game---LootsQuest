@@ -1,0 +1,166 @@
+<?php
+// process_registration.php
+// This script processes the form submission from your existing HTML form
+
+// Database configuration
+$db_host = 'lootsquest-mysql-8aqzlc'; // your database host
+$db_name = 'lootsquest';
+$db_user = 'lootsquest'; // your database username
+$db_pass = 'Hm19vXLPF4nUua7'; // your database password
+
+// Establish database connection
+try {
+    $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4", $db_user, $db_pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    // Log error but don't display to user
+    error_log("Database connection failed: " . $e->getMessage());
+
+    // Still redirect to lootsquest.com even if database fails
+    header("Location: https://lootsquest.com?status=processing");
+    exit();
+}
+
+// Check if form was submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // Collect form data from your existing form fields
+    $first_name = isset($_POST['first_name']) ? trim($_POST['first_name']) : '';
+    $last_name = isset($_POST['last_name']) ? trim($_POST['last_name']) : '';
+    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+    $phone = isset($_POST['phone']) ? trim($_POST['phone']) : '';
+    $address = isset($_POST['address']) ? trim($_POST['address']) : '';
+    $city = isset($_POST['city']) ? trim($_POST['city']) : '';
+    $state = isset($_POST['state']) ? trim($_POST['state']) : '';
+    $zip_code = isset($_POST['zip_code']) ? trim($_POST['zip_code']) : '';
+    $gender = isset($_POST['gender']) ? trim($_POST['gender']) : '';
+    $birthday = isset($_POST['birthday']) ? trim($_POST['birthday']) : '';
+
+    // Get user's IP address
+    $ip_address = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
+
+    // Get device info from user agent
+    $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+    $device = 'desktop';
+    if (preg_match('/(android|iphone|ipad|ipod|blackberry|windows phone|mobile)/i', $user_agent)) {
+        $device = 'mobile';
+    } elseif (preg_match('/(tablet|ipad)/i', $user_agent)) {
+        $device = 'tablet';
+    }
+
+    // Get country from IP (you can implement a geolocation service here)
+    // For now, we'll leave it NULL or set a default
+    $country = '';
+    $country_iso = '';
+
+    try {
+        // Check if email already exists (optional - remove if you want to allow duplicates)
+        $check_stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+        $check_stmt->execute([$email]);
+        $existing_user = $check_stmt->fetch();
+
+        if ($existing_user) {
+            // User already exists, you can still redirect
+            header("Location: https://lootsquest.com?registered=existing");
+            exit();
+        }
+
+        // Generate a unique UID
+        $uid = 'USR_' . strtoupper(uniqid()) . '_' . rand(1000, 9999);
+
+        // Generate a random password (since it's required)
+        $random_password = bin2hex(random_bytes(8));
+        $hashed_password = password_hash($random_password, PASSWORD_DEFAULT);
+
+        // Prepare INSERT statement - matching your users table structure
+        $sql = "INSERT INTO users (
+            uid, name, email, phone, address, city, zip_code, 
+            gender, birthday, ip, device, country, country_iso,
+            password, status, balance, diamond, level, subscription, 
+            user_type, created_at, updated_at
+        ) VALUES (
+            :uid, :name, :email, :phone, :address, :city, :zip_code,
+            :gender, :birthday, :ip, :device, :country, :country_iso,
+            :password, :status, :balance, :diamond, :level, :subscription,
+            :user_type, NOW(), NOW()
+        )";
+
+        $stmt = $pdo->prepare($sql);
+
+        // Bind parameters
+        $params = [
+            ':uid' => $uid,
+            ':name' => $first_name . ' ' . $last_name,
+            ':email' => $email,
+            ':phone' => $phone,
+            ':address' => $address,
+            ':city' => $city,
+            ':zip_code' => $zip_code,
+            ':gender' => !empty($gender) ? $gender : null,
+            ':birthday' => !empty($birthday) ? $birthday : null,
+            ':ip' => $ip_address,
+            ':device' => $device,
+            ':country' => $country,
+            ':country_iso' => $country_iso,
+            ':password' => $hashed_password,
+            ':status' => 1, // Active status
+            ':balance' => '0',
+            ':diamond' => '0',
+            ':level' => '0',
+            ':subscription' => 1,
+            ':user_type' => 'user'
+        ];
+
+        $stmt->execute($params);
+
+        // Get the inserted user ID
+        $user_id = $pdo->lastInsertId();
+
+        // Optional: Log the registration if you have a user_activity table
+        // You can create this table if it doesn't exist
+        try {
+            $log_sql = "INSERT INTO user_activity (user_id, action, ip, created_at) 
+                        VALUES (?, 'registration', ?, NOW())";
+            $log_stmt = $pdo->prepare($log_sql);
+            $log_stmt->execute([$user_id, $ip_address]);
+        } catch (PDOException $e) {
+            // Table might not exist, ignore error
+            error_log("Could not log activity: " . $e->getMessage());
+        }
+
+        // Store minimal info in session if you want
+        session_start();
+        $_SESSION['user_registered'] = true;
+        $_SESSION['user_email'] = $email;
+        $_SESSION['registration_time'] = time();
+
+        // Redirect to lootsquest.com
+        // You can add query parameters to track successful registrations
+        $redirect_url = 'https://lootsquest.com';
+
+        // Add optional tracking parameters
+        $params = [
+            'registration' => 'success',
+            'source' => 'claim_rewards'
+        ];
+
+        header("Location: " . $redirect_url . "?" . http_build_query($params));
+        exit();
+
+    } catch (PDOException $e) {
+        // Log database error
+        error_log("User registration failed: " . $e->getMessage());
+
+        // Still redirect to lootsquest.com even if database insert fails
+        header("Location: https://lootsquest.com?status=processing");
+        exit();
+    }
+
+} else {
+    // If someone tries to access this script directly without POST data
+    // Redirect them to your form page
+    header("Location: index.html");
+    exit();
+}
+?>
