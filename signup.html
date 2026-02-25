@@ -27,11 +27,13 @@
               "background-light": "var(--color-bg-light)",
               "background-dark": "var(--color-bg-dark)",
             },
-            fontFamily: { display: "Spline Sans" },
+            fontFamily: {
+              display: ["Spline Sans", "sans-serif"],
+            },
             borderRadius: {
-              DEFAULT: "0.25rem",
-              lg: "0.5rem",
-              xl: "0.75rem",
+              DEFAULT: "1rem",
+              lg: "2rem",
+              xl: "3rem",
               full: "9999px",
             },
           },
@@ -39,9 +41,9 @@
       };
     </script>
   </head>
-  <body class="bg-background-dark text-white min-h-screen">
+  <body class="bg-background-light dark:bg-background-dark text-white min-h-screen">
     <div
-      class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden max-w-[480px] mx-auto bg-background-dark shadow-2xl"
+      class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden max-w-[480px] md:max-w-none mx-auto bg-background-dark shadow-2xl md:shadow-none"
     >
       <!-- Hero Background Image -->
       <div
@@ -52,106 +54,136 @@
       <!-- Main Content (z-index 10 to clear background) -->
       <div class="relative z-10 w-full flex flex-col flex-grow">
         <div
-          class="flex items-center bg-background-dark/80 backdrop-blur-md sticky top-0 z-50 p-4 justify-between border-b border-white/5"
+          class="flex items-center bg-background-dark/80 backdrop-blur-md sticky top-0 z-50 p-4 justify-between border-b border-white/5 md:px-10 lg:px-20"
         >
+          <!-- Mobile Back Button (Hidden on Desktop) -->
           <div
-            class="text-white flex size-10 shrink-0 items-center justify-center rounded-full bg-white/5 cursor-pointer hover:bg-white/10 transition-colors"
+            class="text-white flex size-10 shrink-0 items-center justify-center rounded-full bg-white/5 cursor-pointer hover:bg-white/10 transition-colors md:hidden"
             onclick="history.back()"
           >
             <span class="material-symbols-outlined">arrow_back</span>
           </div>
-          <h2
-            class="text-white text-lg font-black leading-tight tracking-tight flex-1 text-center italic uppercase"
-          >
-            Claim Rewards
-          </h2>
-          <div class="flex w-10 items-center justify-end">
-            <div class="flex items-center gap-1 text-gold font-black">
-              <span class="material-symbols-outlined text-sm"
-                >monetization_on</span
-              >
+
+          <!-- Logo & Desktop Branding -->
+          <div class="flex items-center gap-3">
+            <a href="index.html" class="hidden md:flex items-center gap-3">
+              <div class="h-10 w-10 bg-primary/20 rounded-lg flex items-center justify-center">
+                <span class="material-symbols-outlined text-primary">stadia_controller</span>
+              </div>
+              <h2 class="text-white text-lg md:text-xl font-black leading-tight tracking-tight italic uppercase">
+                V-Buck GiveAway
+              </h2>
+            </a>
+            <h2 class="text-white text-lg font-black leading-tight tracking-tight flex-1 text-center italic uppercase md:hidden">
+              Claim Rewards
+            </h2>
+          </div>
+
+          <!-- Desktop Navigation (Hidden on Mobile) -->
+          <nav class="hidden md:flex items-center gap-8">
+            <a href="index.html" class="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-colors">Home</a>
+            <a href="#" class="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-colors">Challenges</a>
+            <a href="#" class="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-colors">Rewards</a>
+          </nav>
+
+          <!-- Mobile Reward Badge -->
+          <div class="flex w-10 items-center justify-end md:hidden">
+            <div class="flex items-center gap-1 text-neon-cyan font-black">
+              <span class="material-symbols-outlined text-sm">monetization_on</span>
               <span class="text-xs" id="reward-amount-short">...</span>
+            </div>
+          </div>
+
+          <!-- Desktop Reward Badge -->
+          <div class="hidden md:flex items-center gap-4">
+            <div class="flex items-center gap-2 bg-neon-cyan/10 px-4 py-2 rounded-full border border-neon-cyan/30">
+              <span class="material-symbols-outlined text-neon-cyan">monetization_on</span>
+              <span class="text-neon-cyan font-black text-sm" id="reward-amount-desktop">...</span>
             </div>
           </div>
         </div>
 
-        <div class="px-6 py-8 flex flex-col items-center text-center gap-3">
+        <div class="@container max-w-4xl mx-auto w-full">
+        <div class="px-6 py-8 md:py-12 lg:py-16 flex flex-col items-center text-center gap-3 md:gap-4">
           <div class="flex gap-2 mb-2">
             <span
-              class="material-symbols-outlined text-gold text-4xl animate-bounce"
+              class="material-symbols-outlined text-neon-cyan text-4xl md:text-5xl animate-bounce"
               >monetization_on</span
             >
             <span
-              class="material-symbols-outlined text-gold text-4xl animate-bounce"
+              class="material-symbols-outlined text-neon-cyan text-4xl md:text-5xl animate-bounce"
               style="animation-delay: 0.1s"
               >monetization_on</span
             >
             <span
-              class="material-symbols-outlined text-gold text-4xl animate-bounce"
+              class="material-symbols-outlined text-neon-cyan text-4xl md:text-5xl animate-bounce"
               style="animation-delay: 0.2s"
               >monetization_on</span
             >
           </div>
           <h1
             id="hero-headline"
-            class="text-white text-3xl font-black leading-tight tracking-tighter uppercase italic"
+            class="text-white text-3xl md:text-4xl lg:text-5xl font-black leading-tight tracking-tighter uppercase italic"
           >
             Loading...
           </h1>
           <p
             id="hero-subheadline"
-            class="text-gray-400 text-sm font-medium leading-relaxed max-w-[320px]"
+            class="text-gray-400 text-sm md:text-lg font-medium leading-relaxed max-w-[320px] md:max-w-lg"
           >
             ...
           </p>
         </div>
 
         <!-- How It Works Section -->
-        <div class="px-6 py-4 flex flex-col gap-4">
-          <h3
-            class="text-white text-sm font-bold uppercase tracking-widest text-center opacity-80"
+        <div class="px-6 md:px-10 lg:px-20 py-4 md:py-8 flex flex-col gap-4">
+          <h4
+            class="text-neon-cyan text-xs md:text-sm font-black leading-normal tracking-[0.2em] uppercase text-center"
           >
             How It Works
-          </h3>
-          <div class="grid grid-cols-3 gap-2">
+          </h4>
+          <div class="grid grid-cols-3 gap-3 md:gap-8">
             <div
-              class="bg-white/5 rounded-xl p-3 flex flex-col items-center gap-2 text-center border border-white/5"
+              class="flex flex-1 gap-3 rounded-2xl border border-white/5 bg-white/5 p-4 md:p-8 flex-col items-center text-center hover:bg-white/10 transition-colors"
             >
-              <span class="material-symbols-outlined text-gold text-2xl"
-                >check_box</span
-              >
-              <p class="text-[10px] text-gray-400 font-medium leading-tight">
-                Complete<br />Tasks
-              </p>
+              <div class="text-neon-cyan bg-neon-cyan/10 p-2 md:p-4 rounded-full">
+                <span class="material-symbols-outlined md:text-3xl">track_changes</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <h2 class="text-white text-[13px] md:text-lg font-bold leading-tight">Challenges</h2>
+                <p class="text-gray-500 text-[11px] md:text-sm font-medium leading-tight">Pick a quest</p>
+              </div>
             </div>
             <div
-              class="bg-white/5 rounded-xl p-3 flex flex-col items-center gap-2 text-center border border-white/5"
+              class="flex flex-1 gap-3 rounded-2xl border border-white/5 bg-white/5 p-4 md:p-8 flex-col items-center text-center border-b-2 border-b-primary hover:bg-white/10 transition-colors"
             >
-              <span class="material-symbols-outlined text-gold text-2xl"
-                >verified</span
-              >
-              <p class="text-[10px] text-gray-400 font-medium leading-tight">
-                Verify<br />Identity
-              </p>
+              <div class="text-primary bg-primary/10 p-2 md:p-4 rounded-full">
+                <span class="material-symbols-outlined md:text-3xl">swords</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <h2 class="text-white text-[13px] md:text-lg font-bold leading-tight">Objectives</h2>
+                <p class="text-gray-500 text-[11px] md:text-sm font-medium leading-tight">Drop &amp; win</p>
+              </div>
             </div>
             <div
-              class="bg-white/5 rounded-xl p-3 flex flex-col items-center gap-2 text-center border border-white/5"
+              class="flex flex-1 gap-3 rounded-2xl border border-white/5 bg-white/5 p-4 md:p-8 flex-col items-center text-center hover:bg-white/10 transition-colors"
             >
-              <span class="material-symbols-outlined text-gold text-2xl"
-                >redeem</span
-              >
-              <p class="text-[10px] text-gray-400 font-medium leading-tight">
-                Claim<br />Reward
-              </p>
+              <div class="text-neon-cyan bg-neon-cyan/10 p-2 md:p-4 rounded-full">
+                <span class="material-symbols-outlined md:text-3xl">payments</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <h2 class="text-white text-[13px] md:text-lg font-bold leading-tight">Points</h2>
+                <p class="text-gray-500 text-[11px] md:text-sm font-medium leading-tight">Claim V-Bucks</p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="px-6 pb-12">
+        <div class="px-6 md:px-10 lg:px-20 pb-12 md:pb-16">
           <div
-            class="bg-white/[0.03] border border-white/10 rounded-2xl p-6 glow-purple"
+            class="bg-white/[0.03] border border-white/10 rounded-2xl p-6 md:p-10 glow-purple max-w-2xl mx-auto"
           >
-            <form class="flex flex-col gap-5" action="#" method="POST">
+            <form class="flex flex-col gap-5 md:gap-6" action="#" method="POST">
               <!-- Personal Info Fields -->
               <div class="grid grid-cols-2 gap-4">
                 <div class="flex flex-col gap-1.5">
@@ -164,7 +196,7 @@
                     id="first-name"
                     name="first_name"
                     class="bg-white/5 border-white/10 text-white rounded-xl h-12 px-4 focus:ring-gold focus:border-gold placeholder:text-gray-600 transition-all input-focus-gold"
-                    placeholder="John"
+                    placeholder="First name"
                     type="text"
                     required
                   />
@@ -179,7 +211,7 @@
                     id="last-name"
                     name="last_name"
                     class="bg-white/5 border-white/10 text-white rounded-xl h-12 px-4 focus:ring-gold focus:border-gold placeholder:text-gray-600 transition-all input-focus-gold"
-                    placeholder="Doe"
+                    placeholder="Last name"
                     type="text"
                     required
                   />
@@ -218,12 +250,222 @@
               <div class="flex flex-col gap-1.5">
                 <label
                   class="text-gray-400 text-xs font-bold uppercase tracking-wider ml-1"
+                  >Country</label
+                >
+                <select
+                  name="country"
+                  id="country"
+                  class="bg-white/5 border-white/10 text-white rounded-xl h-12 px-4 focus:ring-gold focus:border-gold appearance-none transition-all"
+                >
+                  <option value="" class="bg-background-dark">Select Country</option>
+                  <option value="AF" class="bg-background-dark">Afghanistan</option>
+                  <option value="AL" class="bg-background-dark">Albania</option>
+                  <option value="DZ" class="bg-background-dark">Algeria</option>
+                  <option value="AD" class="bg-background-dark">Andorra</option>
+                  <option value="AO" class="bg-background-dark">Angola</option>
+                  <option value="AG" class="bg-background-dark">Antigua and Barbuda</option>
+                  <option value="AR" class="bg-background-dark">Argentina</option>
+                  <option value="AM" class="bg-background-dark">Armenia</option>
+                  <option value="AU" class="bg-background-dark">Australia</option>
+                  <option value="AT" class="bg-background-dark">Austria</option>
+                  <option value="AZ" class="bg-background-dark">Azerbaijan</option>
+                  <option value="BS" class="bg-background-dark">Bahamas</option>
+                  <option value="BH" class="bg-background-dark">Bahrain</option>
+                  <option value="BD" class="bg-background-dark">Bangladesh</option>
+                  <option value="BB" class="bg-background-dark">Barbados</option>
+                  <option value="BY" class="bg-background-dark">Belarus</option>
+                  <option value="BE" class="bg-background-dark">Belgium</option>
+                  <option value="BZ" class="bg-background-dark">Belize</option>
+                  <option value="BJ" class="bg-background-dark">Benin</option>
+                  <option value="BT" class="bg-background-dark">Bhutan</option>
+                  <option value="BO" class="bg-background-dark">Bolivia</option>
+                  <option value="BA" class="bg-background-dark">Bosnia and Herzegovina</option>
+                  <option value="BW" class="bg-background-dark">Botswana</option>
+                  <option value="BR" class="bg-background-dark">Brazil</option>
+                  <option value="BN" class="bg-background-dark">Brunei</option>
+                  <option value="BG" class="bg-background-dark">Bulgaria</option>
+                  <option value="BF" class="bg-background-dark">Burkina Faso</option>
+                  <option value="BI" class="bg-background-dark">Burundi</option>
+                  <option value="CV" class="bg-background-dark">Cabo Verde</option>
+                  <option value="KH" class="bg-background-dark">Cambodia</option>
+                  <option value="CM" class="bg-background-dark">Cameroon</option>
+                  <option value="CA" class="bg-background-dark">Canada</option>
+                  <option value="CF" class="bg-background-dark">Central African Republic</option>
+                  <option value="TD" class="bg-background-dark">Chad</option>
+                  <option value="CL" class="bg-background-dark">Chile</option>
+                  <option value="CN" class="bg-background-dark">China</option>
+                  <option value="CO" class="bg-background-dark">Colombia</option>
+                  <option value="KM" class="bg-background-dark">Comoros</option>
+                  <option value="CG" class="bg-background-dark">Congo</option>
+                  <option value="CD" class="bg-background-dark">Congo (DRC)</option>
+                  <option value="CR" class="bg-background-dark">Costa Rica</option>
+                  <option value="CI" class="bg-background-dark">Côte d'Ivoire</option>
+                  <option value="HR" class="bg-background-dark">Croatia</option>
+                  <option value="CU" class="bg-background-dark">Cuba</option>
+                  <option value="CY" class="bg-background-dark">Cyprus</option>
+                  <option value="CZ" class="bg-background-dark">Czechia</option>
+                  <option value="DK" class="bg-background-dark">Denmark</option>
+                  <option value="DJ" class="bg-background-dark">Djibouti</option>
+                  <option value="DM" class="bg-background-dark">Dominica</option>
+                  <option value="DO" class="bg-background-dark">Dominican Republic</option>
+                  <option value="EC" class="bg-background-dark">Ecuador</option>
+                  <option value="EG" class="bg-background-dark">Egypt</option>
+                  <option value="SV" class="bg-background-dark">El Salvador</option>
+                  <option value="GQ" class="bg-background-dark">Equatorial Guinea</option>
+                  <option value="ER" class="bg-background-dark">Eritrea</option>
+                  <option value="EE" class="bg-background-dark">Estonia</option>
+                  <option value="SZ" class="bg-background-dark">Eswatini</option>
+                  <option value="ET" class="bg-background-dark">Ethiopia</option>
+                  <option value="FJ" class="bg-background-dark">Fiji</option>
+                  <option value="FI" class="bg-background-dark">Finland</option>
+                  <option value="FR" class="bg-background-dark">France</option>
+                  <option value="GA" class="bg-background-dark">Gabon</option>
+                  <option value="GM" class="bg-background-dark">Gambia</option>
+                  <option value="GE" class="bg-background-dark">Georgia</option>
+                  <option value="DE" class="bg-background-dark">Germany</option>
+                  <option value="GH" class="bg-background-dark">Ghana</option>
+                  <option value="GR" class="bg-background-dark">Greece</option>
+                  <option value="GD" class="bg-background-dark">Grenada</option>
+                  <option value="GT" class="bg-background-dark">Guatemala</option>
+                  <option value="GN" class="bg-background-dark">Guinea</option>
+                  <option value="GW" class="bg-background-dark">Guinea-Bissau</option>
+                  <option value="GY" class="bg-background-dark">Guyana</option>
+                  <option value="HT" class="bg-background-dark">Haiti</option>
+                  <option value="HN" class="bg-background-dark">Honduras</option>
+                  <option value="HU" class="bg-background-dark">Hungary</option>
+                  <option value="IS" class="bg-background-dark">Iceland</option>
+                  <option value="IN" class="bg-background-dark">India</option>
+                  <option value="ID" class="bg-background-dark">Indonesia</option>
+                  <option value="IR" class="bg-background-dark">Iran</option>
+                  <option value="IQ" class="bg-background-dark">Iraq</option>
+                  <option value="IE" class="bg-background-dark">Ireland</option>
+                  <option value="IL" class="bg-background-dark">Israel</option>
+                  <option value="IT" class="bg-background-dark">Italy</option>
+                  <option value="JM" class="bg-background-dark">Jamaica</option>
+                  <option value="JP" class="bg-background-dark">Japan</option>
+                  <option value="JO" class="bg-background-dark">Jordan</option>
+                  <option value="KZ" class="bg-background-dark">Kazakhstan</option>
+                  <option value="KE" class="bg-background-dark">Kenya</option>
+                  <option value="KI" class="bg-background-dark">Kiribati</option>
+                  <option value="KP" class="bg-background-dark">Korea (North)</option>
+                  <option value="KR" class="bg-background-dark">Korea (South)</option>
+                  <option value="KW" class="bg-background-dark">Kuwait</option>
+                  <option value="KG" class="bg-background-dark">Kyrgyzstan</option>
+                  <option value="LA" class="bg-background-dark">Laos</option>
+                  <option value="LV" class="bg-background-dark">Latvia</option>
+                  <option value="LB" class="bg-background-dark">Lebanon</option>
+                  <option value="LS" class="bg-background-dark">Lesotho</option>
+                  <option value="LR" class="bg-background-dark">Liberia</option>
+                  <option value="LY" class="bg-background-dark">Libya</option>
+                  <option value="LI" class="bg-background-dark">Liechtenstein</option>
+                  <option value="LT" class="bg-background-dark">Lithuania</option>
+                  <option value="LU" class="bg-background-dark">Luxembourg</option>
+                  <option value="MG" class="bg-background-dark">Madagascar</option>
+                  <option value="MW" class="bg-background-dark">Malawi</option>
+                  <option value="MY" class="bg-background-dark">Malaysia</option>
+                  <option value="MV" class="bg-background-dark">Maldives</option>
+                  <option value="ML" class="bg-background-dark">Mali</option>
+                  <option value="MT" class="bg-background-dark">Malta</option>
+                  <option value="MH" class="bg-background-dark">Marshall Islands</option>
+                  <option value="MR" class="bg-background-dark">Mauritania</option>
+                  <option value="MU" class="bg-background-dark">Mauritius</option>
+                  <option value="MX" class="bg-background-dark">Mexico</option>
+                  <option value="FM" class="bg-background-dark">Micronesia</option>
+                  <option value="MD" class="bg-background-dark">Moldova</option>
+                  <option value="MC" class="bg-background-dark">Monaco</option>
+                  <option value="MN" class="bg-background-dark">Mongolia</option>
+                  <option value="ME" class="bg-background-dark">Montenegro</option>
+                  <option value="MA" class="bg-background-dark">Morocco</option>
+                  <option value="MZ" class="bg-background-dark">Mozambique</option>
+                  <option value="MM" class="bg-background-dark">Myanmar</option>
+                  <option value="NA" class="bg-background-dark">Namibia</option>
+                  <option value="NR" class="bg-background-dark">Nauru</option>
+                  <option value="NP" class="bg-background-dark">Nepal</option>
+                  <option value="NL" class="bg-background-dark">Netherlands</option>
+                  <option value="NZ" class="bg-background-dark">New Zealand</option>
+                  <option value="NI" class="bg-background-dark">Nicaragua</option>
+                  <option value="NE" class="bg-background-dark">Niger</option>
+                  <option value="NG" class="bg-background-dark">Nigeria</option>
+                  <option value="MK" class="bg-background-dark">North Macedonia</option>
+                  <option value="NO" class="bg-background-dark">Norway</option>
+                  <option value="OM" class="bg-background-dark">Oman</option>
+                  <option value="PK" class="bg-background-dark">Pakistan</option>
+                  <option value="PW" class="bg-background-dark">Palau</option>
+                  <option value="PS" class="bg-background-dark">Palestine</option>
+                  <option value="PA" class="bg-background-dark">Panama</option>
+                  <option value="PG" class="bg-background-dark">Papua New Guinea</option>
+                  <option value="PY" class="bg-background-dark">Paraguay</option>
+                  <option value="PE" class="bg-background-dark">Peru</option>
+                  <option value="PH" class="bg-background-dark">Philippines</option>
+                  <option value="PL" class="bg-background-dark">Poland</option>
+                  <option value="PT" class="bg-background-dark">Portugal</option>
+                  <option value="QA" class="bg-background-dark">Qatar</option>
+                  <option value="RO" class="bg-background-dark">Romania</option>
+                  <option value="RU" class="bg-background-dark">Russia</option>
+                  <option value="RW" class="bg-background-dark">Rwanda</option>
+                  <option value="KN" class="bg-background-dark">Saint Kitts and Nevis</option>
+                  <option value="LC" class="bg-background-dark">Saint Lucia</option>
+                  <option value="VC" class="bg-background-dark">Saint Vincent and the Grenadines</option>
+                  <option value="WS" class="bg-background-dark">Samoa</option>
+                  <option value="SM" class="bg-background-dark">San Marino</option>
+                  <option value="ST" class="bg-background-dark">São Tomé and Príncipe</option>
+                  <option value="SA" class="bg-background-dark">Saudi Arabia</option>
+                  <option value="SN" class="bg-background-dark">Senegal</option>
+                  <option value="RS" class="bg-background-dark">Serbia</option>
+                  <option value="SC" class="bg-background-dark">Seychelles</option>
+                  <option value="SL" class="bg-background-dark">Sierra Leone</option>
+                  <option value="SG" class="bg-background-dark">Singapore</option>
+                  <option value="SK" class="bg-background-dark">Slovakia</option>
+                  <option value="SI" class="bg-background-dark">Slovenia</option>
+                  <option value="SB" class="bg-background-dark">Solomon Islands</option>
+                  <option value="SO" class="bg-background-dark">Somalia</option>
+                  <option value="ZA" class="bg-background-dark">South Africa</option>
+                  <option value="SS" class="bg-background-dark">South Sudan</option>
+                  <option value="ES" class="bg-background-dark">Spain</option>
+                  <option value="LK" class="bg-background-dark">Sri Lanka</option>
+                  <option value="SD" class="bg-background-dark">Sudan</option>
+                  <option value="SR" class="bg-background-dark">Suriname</option>
+                  <option value="SE" class="bg-background-dark">Sweden</option>
+                  <option value="CH" class="bg-background-dark">Switzerland</option>
+                  <option value="SY" class="bg-background-dark">Syria</option>
+                  <option value="TW" class="bg-background-dark">Taiwan</option>
+                  <option value="TJ" class="bg-background-dark">Tajikistan</option>
+                  <option value="TZ" class="bg-background-dark">Tanzania</option>
+                  <option value="TH" class="bg-background-dark">Thailand</option>
+                  <option value="TL" class="bg-background-dark">Timor-Leste</option>
+                  <option value="TG" class="bg-background-dark">Togo</option>
+                  <option value="TO" class="bg-background-dark">Tonga</option>
+                  <option value="TT" class="bg-background-dark">Trinidad and Tobago</option>
+                  <option value="TN" class="bg-background-dark">Tunisia</option>
+                  <option value="TR" class="bg-background-dark">Turkey</option>
+                  <option value="TM" class="bg-background-dark">Turkmenistan</option>
+                  <option value="TV" class="bg-background-dark">Tuvalu</option>
+                  <option value="UG" class="bg-background-dark">Uganda</option>
+                  <option value="UA" class="bg-background-dark">Ukraine</option>
+                  <option value="AE" class="bg-background-dark">United Arab Emirates</option>
+                  <option value="GB" class="bg-background-dark">United Kingdom</option>
+                  <option value="US" class="bg-background-dark">United States</option>
+                  <option value="UY" class="bg-background-dark">Uruguay</option>
+                  <option value="UZ" class="bg-background-dark">Uzbekistan</option>
+                  <option value="VU" class="bg-background-dark">Vanuatu</option>
+                  <option value="VA" class="bg-background-dark">Vatican City</option>
+                  <option value="VE" class="bg-background-dark">Venezuela</option>
+                  <option value="VN" class="bg-background-dark">Vietnam</option>
+                  <option value="YE" class="bg-background-dark">Yemen</option>
+                  <option value="ZM" class="bg-background-dark">Zambia</option>
+                  <option value="ZW" class="bg-background-dark">Zimbabwe</option>
+                </select>
+              </div>
+
+              <div class="flex flex-col gap-1.5">
+                <label
+                  class="text-gray-400 text-xs font-bold uppercase tracking-wider ml-1"
                   >Address</label
                 >
                 <input
                   name="address"
                   class="bg-white/5 border-white/10 text-white rounded-xl h-12 px-4 focus:ring-gold focus:border-gold placeholder:text-gray-600 transition-all"
-                  placeholder="123 Battle Royale Ave"
+                  placeholder="Street address"
                   type="text"
                 />
               </div>
@@ -237,32 +479,22 @@
                   <input
                     name="city"
                     class="bg-white/5 border-white/10 text-white rounded-xl h-12 px-4 focus:ring-gold focus:border-gold placeholder:text-gray-600 transition-all"
-                    placeholder="Tilted Towers"
+                    placeholder="Your city"
                     type="text"
                   />
                 </div>
                 <div class="flex flex-col gap-1.5">
                   <label
                     class="text-gray-400 text-xs font-bold uppercase tracking-wider ml-1"
-                    >State</label
+                    >State / Region</label
                   >
-                  <select
+                  <input
                     name="state"
-                    class="bg-white/5 border-white/10 text-white rounded-xl h-12 px-4 focus:ring-gold focus:border-gold appearance-none transition-all"
-                  >
-                    <option value="" class="bg-background-dark">
-                      Select State
-                    </option>
-                    <option value="California" class="bg-background-dark">
-                      California
-                    </option>
-                    <option value="New York" class="bg-background-dark">
-                      New York
-                    </option>
-                    <option value="Texas" class="bg-background-dark">
-                      Texas
-                    </option>
-                  </select>
+                    id="state"
+                    class="bg-white/5 border-white/10 text-white rounded-xl h-12 px-4 focus:ring-gold focus:border-gold placeholder:text-gray-600 transition-all"
+                    placeholder="State or region"
+                    type="text"
+                  />
                 </div>
               </div>
 
@@ -270,12 +502,12 @@
                 <div class="flex flex-col gap-1.5">
                   <label
                     class="text-gray-400 text-xs font-bold uppercase tracking-wider ml-1"
-                    >Zip Code</label
+                    >Postal Code</label
                   >
                   <input
                     name="zip"
                     class="bg-white/5 border-white/10 text-white rounded-xl h-12 px-4 focus:ring-gold focus:border-gold placeholder:text-gray-600 transition-all"
-                    placeholder="90210"
+                    placeholder="Postal code"
                     type="text"
                   />
                 </div>
@@ -326,10 +558,10 @@
               </div>
 
               <button
-                class="glow-gold w-full h-14 bg-gold text-background-dark font-black uppercase tracking-widest rounded-full flex items-center justify-center gap-3 hover:scale-[1.02] transition-transform active:scale-95 mt-4"
+                class="glow-cyan w-full h-14 md:h-16 bg-neon-cyan text-background-dark font-black uppercase tracking-widest rounded-full flex items-center justify-center gap-3 hover:scale-[1.02] transition-transform active:scale-95 mt-4 shadow-lg shadow-neon-cyan/20"
                 type="submit"
               >
-                <span id="cta-text">Get Started</span>
+                <span id="cta-text" class="text-sm md:text-base">Get Started</span>
                 <div class="flex -space-x-1">
                   <span class="material-symbols-outlined text-lg"
                     >monetization_on</span
@@ -342,15 +574,16 @@
             </form>
           </div>
         </div>
+        </div><!-- End @container -->
 
-        <footer class="bg-background-dark p-8 pb-12 border-t border-white/5">
-          <div class="flex flex-col gap-6">
+        <footer class="bg-background-dark p-8 md:p-12 pb-12 border-t border-white/5">
+          <div class="flex flex-col gap-6 max-w-7xl mx-auto">
             <div class="flex justify-center gap-8 text-gray-500">
               <span class="material-symbols-outlined">security</span>
               <span class="material-symbols-outlined">verified_user</span>
               <span class="material-symbols-outlined">lock</span>
             </div>
-            <p class="text-[10px] text-gray-600 text-center leading-relaxed">
+            <p class="text-[10px] md:text-xs text-gray-600 text-center leading-relaxed max-w-2xl mx-auto">
               Disclaimer: This platform is not affiliated with, maintained,
               authorized, endorsed, or sponsored by any game developers. Terms
               and conditions apply. All rewards are subject to availability.
@@ -364,8 +597,8 @@
               <span class="text-gray-700">•</span>
               <span>Support</span>
             </div>
-            <p class="text-[10px] text-gray-700 text-center">
-              © 2024 Reward Gateway. All rights reserved.
+            <p class="text-[10px] md:text-xs text-gray-700 text-center">
+              © 2026 Reward Gateway. All rights reserved.
             </p>
           </div>
         </footer>

@@ -69,6 +69,7 @@ function hideReward() {
 function applyConfig(config) {
   // Text Content Updates using IDs
   updateText("reward-amount-short", config.REWARD_POINTS);
+  updateText("reward-amount-desktop", config.REWARD_POINTS);
 
   // HTML Content Updates - signup.html elements
   updateHTML("hero-headline", config.HERO_HEADLINE || `Claim ${config.GAME_CURRENCY}`);
@@ -187,10 +188,6 @@ function handleSubmission() {
   // 3. Show processing/reward animation
   showRewardAnimation();
 
-  // 4. Simulate delay then redirect
-  setTimeout(() => {
-    redirectToOffer(formData);
-  }, 2500); // 2.5 seconds animation
 }
 
 function collectFormData() {
