@@ -47,7 +47,7 @@ async function loadConfig() {
 
     // Auto-trigger reward animation if URL param exists
     if (urlParams.get("reward") === "true") {
-      setTimeout(triggerReward, 500);
+      setTimeout(triggerReward, 300);
     }
   } catch (error) {
     console.error("Error loading config:", error);
@@ -189,9 +189,7 @@ function handleSubmission() {
   showRewardAnimation();
 
   // 4. Redirect after a short delay
-  setTimeout(() => {
-    redirectToOffer(formData);
-  }, 500);
+  redirectToOffer(formData);
 }
 
 function collectFormData() {
