@@ -168,7 +168,7 @@ function showRewardAnimation() {
       "reward-overlay flex flex-col items-center justify-center fixed inset-0 z-50 bg-black/90 backdrop-blur-sm"; // Tailwind classes added
     overlay.innerHTML = `
             <div class="coin-shower p-4">
-                <span class="material-symbols-outlined text-gold animate-bounce" style="font-size: 80px;">monetization_on</span>
+                <img src="logo.png" alt="Logo" class="animate-bounce" style="width: 80px; height: auto;" />
             </div>
             <h2 class="text-white text-2xl font-black uppercase italic mt-4 animate-pulse">Generating Reward...</h2>
             <p class="text-gold font-bold text-xl mt-2">${currentConfig.REWARD_POINTS || "Points"} Adding...</p>
