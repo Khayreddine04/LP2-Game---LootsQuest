@@ -50,12 +50,13 @@
         class="flex items-center bg-background-dark/80 backdrop-blur-md sticky top-0 z-50 p-4 justify-between border-b border-white/5 md:px-10 lg:px-20"
       >
         <!-- Mobile Menu Icon (Hidden on Desktop) -->
-        <div
+        <button
+          id="menu-button"
+          aria-label="Open menu"
           class="text-white flex size-10 shrink-0 items-center justify-center rounded-full bg-white/5 md:hidden"
-          data-icon="menu"
         >
           <span class="material-symbols-outlined">menu</span>
-        </div>
+        </button>
 
         <!-- Logo & Desktop Branding -->
         <div class="flex items-center gap-3">
@@ -75,7 +76,7 @@
         </div>
 
         <!-- Desktop Navigation (Hidden on Mobile) -->
-        <nav class="md:flex items-center gap-8">
+        <nav class="hidden md:!flex items-center gap-8">
           <a
             href="#"
             class="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-colors"
@@ -95,8 +96,8 @@
 
         <!-- Profile/Auth Actions -->
         <div class="flex items-center gap-4">
-          <!-- Desktop Buttons -->
-          <div class=" md:flex items-center gap-6">
+          <!-- Desktop Buttons (hidden on mobile) -->
+          <div class="hidden md:!flex items-center gap-6">
             <button
               data-action="signup"
               class="px-8 py-3 rounded-full bg-primary text-xs font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-105 transition-transform cursor-pointer"
@@ -474,5 +475,25 @@
     </div>
 
     <script src="script.js"></script>
+    <!-- Mobile Sidebar Markup -->
+    <div id="mobile-sidebar" class="mobile-sidebar" aria-hidden="true">
+      <div class="mobile-sidebar-overlay" data-action="close-sidebar"></div>
+      <aside class="mobile-sidebar-panel">
+        <div class="mobile-sidebar-header">
+          <h3 class="text-white font-black text-lg">Menu</h3>
+          <button id="mobile-sidebar-close" aria-label="Close menu" class="mobile-sidebar-close">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <nav class="mobile-nav flex flex-col gap-4 mt-6">
+          <a href="#" class="text-white font-bold uppercase tracking-wider">Challenges</a>
+          <a href="#" class="text-white font-bold uppercase tracking-wider">Rewards</a>
+          <a href="#" class="text-white font-bold uppercase tracking-wider">Leaderboard</a>
+        </nav>
+        <div class="mobile-cta mt-8">
+          <button data-action="signup" class="w-full h-14 rounded-full bg-neon-cyan text-background-dark font-black uppercase tracking-widest">Sign Up</button>
+        </div>
+      </aside>
+    </div>
   </body>
 </html>

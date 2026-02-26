@@ -3,7 +3,9 @@
 document.addEventListener("DOMContentLoaded", () => {
   loadConfig();
   setupForm();
+  detectAndSelectCountry();
   updateYear();
+  setupMenu();
   setupRedirects();
 });
 
@@ -94,11 +96,12 @@ function applyConfig(config) {
   // Hero Image - both pages
   if (config.HERO_IMAGE) {
     const heroImageEl = document.getElementById("hero-image");
-    if (heroImageEl) {
+    if (heroImageEl && (!heroImageEl.style.backgroundImage || heroImageEl.style.backgroundImage === 'none')) {
       heroImageEl.style.backgroundImage = `url('${config.HERO_IMAGE}')`;
     }
     const indexHeroImageEl = document.getElementById("index-hero-image");
-    if (indexHeroImageEl) {
+    // Only set the index hero image if there isn't an existing inline background-image
+    if (indexHeroImageEl && (!indexHeroImageEl.style.backgroundImage || indexHeroImageEl.style.backgroundImage === 'none')) {
       indexHeroImageEl.style.backgroundImage = `url('${config.HERO_IMAGE}')`;
     }
   }
@@ -158,6 +161,51 @@ function setupForm() {
   }
 }
 
+// Auto-detect user's country and select matching option in the #country select
+async function detectAndSelectCountry() {
+  const select = document.getElementById("country");
+  if (!select) return;
+
+  function setIfExists(code) {
+    if (!code) return false;
+    const cc = String(code).toUpperCase();
+    const opt = Array.from(select.options).find((o) => o.value === cc);
+    if (opt) {
+      select.value = cc;
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+      return true;
+    }
+    return false;
+  }
+
+  // 1) Try IP-based geolocation with a short timeout
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 3000);
+    const resp = await fetch('https://ipapi.co/json', { signal: controller.signal });
+    clearTimeout(timeout);
+    if (resp && resp.ok) {
+      const data = await resp.json();
+      if (setIfExists(data.country || data.country_code)) return;
+    }
+  } catch (e) {
+    // ignore and fall through to locale fallback
+  }
+
+  // 2) Fallback: use browser locale (e.g., en-US)
+  try {
+    const lang = navigator.language || navigator.userLanguage;
+    if (lang && lang.includes('-')) {
+      const possible = lang.split('-').pop();
+      if (setIfExists(possible)) return;
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  // 3) No match found -- leave the default option
+}
+
 function showRewardAnimation() {
   // Create or show overlay
   let overlay = document.getElementById("reward-overlay");
@@ -190,6 +238,44 @@ function handleSubmission() {
 
   // 4. Redirect after a short delay
   redirectToOffer(formData);
+}
+
+// Mobile sidebar/menu behavior
+function setupMenu() {
+  const menuBtn = document.getElementById('menu-button');
+  const sidebar = document.getElementById('mobile-sidebar');
+  const closeBtn = document.getElementById('mobile-sidebar-close');
+
+  if (!menuBtn || !sidebar) return;
+
+  function openSidebar() {
+    sidebar.classList.add('open');
+    sidebar.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    sidebar.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  menuBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    openSidebar();
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+
+  // Close when clicking overlay
+  sidebar.querySelectorAll('[data-action="close-sidebar"], .mobile-sidebar-overlay').forEach((el) => {
+    el.addEventListener('click', closeSidebar);
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && sidebar.classList.contains('open')) closeSidebar();
+  });
 }
 
 function collectFormData() {

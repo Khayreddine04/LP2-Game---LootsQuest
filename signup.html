@@ -45,12 +45,6 @@
     <div
       class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden max-w-[480px] md:max-w-none mx-auto bg-background-dark shadow-2xl md:shadow-none"
     >
-      <!-- Hero Background Image -->
-      <div
-        id="hero-image"
-        class="absolute inset-0 z-0 opacity-30 bg-cover bg-center bg-no-repeat pointer-events-none"
-      ></div>
-
       <!-- Main Content (z-index 10 to clear background) -->
       <div class="relative z-10 w-full flex flex-col flex-grow">
         <div
@@ -190,7 +184,7 @@
                   <label
                     class="text-gray-400 text-xs font-bold uppercase tracking-wider ml-1"
                     for="first-name"
-                    >First Name</label
+                    >First Name <span class="text-red-500 ml-1">*</span></label
                   >
                   <input
                     id="first-name"
@@ -205,7 +199,7 @@
                   <label
                     class="text-gray-400 text-xs font-bold uppercase tracking-wider ml-1"
                     for="last-name"
-                    >Last Name</label
+                    >Last Name <span class="text-red-500 ml-1">*</span></label
                   >
                   <input
                     id="last-name"
@@ -222,7 +216,7 @@
                 <label
                   class="text-gray-400 text-xs font-bold uppercase tracking-wider ml-1"
                   for="email"
-                  >Email Address</label
+                  >Email Address <span class="text-red-500 ml-1">*</span></label
                 >
                 <input
                   id="email"
@@ -237,25 +231,27 @@
               <div class="flex flex-col gap-1.5">
                 <label
                   class="text-gray-400 text-xs font-bold uppercase tracking-wider ml-1"
-                  >Phone Number</label
+                  >Phone Number <span class="text-red-500 ml-1">*</span></label
                 >
                 <input
                   name="phone"
                   class="bg-white/5 border-white/10 text-white rounded-xl h-12 px-4 focus:ring-gold focus:border-gold placeholder:text-gray-600 transition-all"
                   placeholder="XXX-XXX-XXXX"
                   type="tel"
+                  required
                 />
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label
                   class="text-gray-400 text-xs font-bold uppercase tracking-wider ml-1"
-                  >Country</label
+                  >Country <span class="text-red-500 ml-1">*</span></label
                 >
                 <select
                   name="country"
                   id="country"
                   class="bg-white/5 border-white/10 text-white rounded-xl h-12 px-4 focus:ring-gold focus:border-gold appearance-none transition-all"
+                  required
                 >
                   <option value="" class="bg-background-dark">Select Country</option>
                   <option value="AF" class="bg-background-dark">Afghanistan</option>
@@ -460,13 +456,14 @@
               <div class="flex flex-col gap-1.5">
                 <label
                   class="text-gray-400 text-xs font-bold uppercase tracking-wider ml-1"
-                  >Address</label
+                  >Address <span class="text-red-500 ml-1">*</span></label
                 >
                 <input
                   name="address"
                   class="bg-white/5 border-white/10 text-white rounded-xl h-12 px-4 focus:ring-gold focus:border-gold placeholder:text-gray-600 transition-all"
                   placeholder="Street address"
                   type="text"
+                  required
                 />
               </div>
 
@@ -474,13 +471,14 @@
                 <div class="flex flex-col gap-1.5">
                   <label
                     class="text-gray-400 text-xs font-bold uppercase tracking-wider ml-1"
-                    >City</label
+                    >City <span class="text-red-500 ml-1">*</span></label
                   >
                   <input
                     name="city"
                     class="bg-white/5 border-white/10 text-white rounded-xl h-12 px-4 focus:ring-gold focus:border-gold placeholder:text-gray-600 transition-all"
                     placeholder="Your city"
                     type="text"
+                    required
                   />
                 </div>
                 <div class="flex flex-col gap-1.5">
@@ -514,11 +512,12 @@
                 <div class="flex flex-col gap-1.5">
                   <label
                     class="text-gray-400 text-xs font-bold uppercase tracking-wider ml-1"
-                    >Gender</label
+                    >Gender <span class="text-red-500 ml-1">*</span></label
                   >
                   <select
                     name="gender"
                     class="bg-white/5 border-white/10 text-white rounded-xl h-12 px-4 focus:ring-gold focus:border-gold appearance-none transition-all"
+                    required
                   >
                     <option value="" class="bg-background-dark">Select</option>
                     <option value="Male" class="bg-background-dark">
@@ -537,12 +536,13 @@
               <div class="flex flex-col gap-1.5">
                 <label
                   class="text-gray-400 text-xs font-bold uppercase tracking-wider ml-1"
-                  >Date of Birth</label
+                  >Date of Birth <span class="text-red-500 ml-1">*</span></label
                 >
                 <input
                   name="dob"
                   class="bg-white/5 border-white/10 text-white rounded-xl h-12 px-4 focus:ring-gold focus:border-gold transition-all [color-scheme:dark]"
                   type="date"
+                  required
                 />
               </div>
 
