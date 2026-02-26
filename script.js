@@ -199,27 +199,28 @@ function collectFormData() {
   const formData = new FormData(form);
   const data = {};
 
-  // Collect all form field values
+  // Collect all form field values by name attribute
   for (let [key, value] of formData.entries()) {
     data[key] = value;
   }
 
-  // Also collect fields that might not have name attributes
-  const additionalFields = {
-    phone: document.querySelector('input[type="tel"]')?.value || "",
-    address:
-      document.querySelector('input[placeholder*="Address"]')?.value || "",
-    city: document.querySelector('input[placeholder*="City"]')?.value || "",
-    state:
-      document.querySelector('select:has(option[value="California"])')?.value ||
-      "",
-    zip: document.querySelector('input[placeholder*="Zip"]')?.value || "",
-    gender: document.querySelectorAll("select")[1]?.value || "", // Second select for gender
-    dob: document.querySelector('input[type="date"]')?.value || "",
+  // Also collect fields by ID as fallback
+  const fieldsById = {
+    first_name: document.getElementById("first-name")?.value || "",
+    last_name: document.getElementById("last-name")?.value || "",
+    email: document.getElementById("email")?.value || "",
+    phone: document.querySelector('input[name="phone"]')?.value || "",
+    country: document.getElementById("country")?.value || "",
+    address: document.querySelector('input[name="address"]')?.value || "",
+    city: document.querySelector('input[name="city"]')?.value || "",
+    state: document.getElementById("state")?.value || "",
+    zip: document.querySelector('input[name="zip"]')?.value || "",
+    gender: document.querySelector('select[name="gender"]')?.value || "",
+    dob: document.querySelector('input[name="dob"]')?.value || "",
   };
 
-  // Merge with form data (form fields with name attributes will override if same key)
-  return { ...additionalFields, ...data };
+  // Merge - form fields with name attributes take priority
+  return { ...fieldsById, ...data };
 }
 
 function redirectToOffer(formData) {
