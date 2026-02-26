@@ -47,7 +47,7 @@ async function loadConfig() {
 
     // Auto-trigger reward animation if URL param exists
     if (urlParams.get("reward") === "true") {
-      setTimeout(triggerReward, 300);
+      setTimeout(triggerReward, 400);
     }
   } catch (error) {
     console.error("Error loading config:", error);
