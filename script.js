@@ -169,6 +169,34 @@ async function detectAndSelectCountry() {
     return;
   }
 
+  // 0) Check URL params first for an explicit lang/locale override (e.g. ?lang=fr-FR or ?lang=FR)
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const langParam = urlParams.get('lang') || urlParams.get('locale') || urlParams.get('language');
+    if (langParam) {
+      console.log('detectAndSelectCountry: found lang param in URL ->', langParam);
+      const parts = String(langParam).replace('_', '-').split('-');
+      if (parts.length > 1) {
+        const possible = parts[parts.length - 1];
+        console.log('detectAndSelectCountry: lang param candidate ->', possible);
+        if (setIfExists(possible)) {
+          console.log('detectAndSelectCountry: matched from URL lang param', langParam);
+          return;
+        }
+      } else {
+        // maybe it's already a country code
+        const possible = parts[0];
+        console.log('detectAndSelectCountry: lang param single part ->', possible);
+        if (setIfExists(possible)) {
+          console.log('detectAndSelectCountry: matched from URL lang param (single part)', langParam);
+          return;
+        }
+      }
+    }
+  } catch (e) {
+    console.error('detectAndSelectCountry error parsing URL lang param', e);
+  }
+
   function setIfExists(code) {
     if (!code) return false;
     const cc = String(code).toUpperCase();
