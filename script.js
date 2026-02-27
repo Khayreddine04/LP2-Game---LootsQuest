@@ -164,46 +164,50 @@ function setupForm() {
 // Auto-detect user's country and select matching option in the #country select
 async function detectAndSelectCountry() {
   const select = document.getElementById("country");
-  if (!select) return;
+  if (!select) {
+    console.log('detectAndSelectCountry: no #country select found');
+    return;
+  }
 
   function setIfExists(code) {
     if (!code) return false;
     const cc = String(code).toUpperCase();
+    console.log('detectAndSelectCountry: try set country code ->', cc);
     const opt = Array.from(select.options).find((o) => o.value === cc);
     if (opt) {
       select.value = cc;
       select.dispatchEvent(new Event('change', { bubbles: true }));
+      console.log('detectAndSelectCountry: selected country', cc, '-', opt.textContent.trim());
       return true;
     }
+    console.log('detectAndSelectCountry: no option for', cc);
     return false;
   }
 
-  // 1) Try IP-based geolocation with a short timeout
+  // Prefer browser locale (navigator) to detect country codes (e.g. en-US -> US)
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 3000);
-    const resp = await fetch('https://ipapi.co/json', { signal: controller.signal });
-    clearTimeout(timeout);
-    if (resp && resp.ok) {
-      const data = await resp.json();
-      if (setIfExists(data.country || data.country_code)) return;
+    const locales = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || navigator.userLanguage];
+    console.log('detectAndSelectCountry: navigator locales ->', locales);
+    for (const locale of locales) {
+      if (!locale) continue;
+      const parts = locale.replace('_', '-').split('-');
+      // try country part (last segment) first
+      if (parts.length > 1) {
+        const possible = parts[parts.length - 1];
+        console.log('detectAndSelectCountry: checking locale', locale, '-> candidate', possible);
+        if (setIfExists(possible)) {
+          console.log('detectAndSelectCountry: matched from locale', locale);
+          return;
+        }
+      } else {
+        console.log('detectAndSelectCountry: locale has no region part:', locale);
+      }
     }
   } catch (e) {
-    // ignore and fall through to locale fallback
+    console.error('detectAndSelectCountry error parsing navigator locales', e);
   }
 
-  // 2) Fallback: use browser locale (e.g., en-US)
-  try {
-    const lang = navigator.language || navigator.userLanguage;
-    if (lang && lang.includes('-')) {
-      const possible = lang.split('-').pop();
-      if (setIfExists(possible)) return;
-    }
-  } catch (e) {
-    // ignore
-  }
-
-  // 3) No match found -- leave the default option
+  console.log('detectAndSelectCountry: no match from navigator locales; leaving default');
 }
 
 function showRewardAnimation() {
