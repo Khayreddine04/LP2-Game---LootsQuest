@@ -235,29 +235,29 @@ async function detectAndSelectCountry() {
     return false;
   }
 
-  // Prefer browser locale (navigator) to detect country codes (e.g. en-US -> US)
+  // 1) IP-based geolocation FIRST (most accurate for real location)
   try {
-    const locales = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || navigator.userLanguage];
-    console.log('detectAndSelectCountry: navigator locales ->', locales);
-    for (const locale of locales) {
-      if (!locale) continue;
-      const parts = locale.replace('_', '-').split('-');
-      // try country part (last segment) first
-      if (parts.length > 1) {
-        const possible = parts[parts.length - 1];
-        console.log('detectAndSelectCountry: checking locale', locale, '-> candidate', possible);
-        if (setIfExists(possible)) {
-          console.log('detectAndSelectCountry: matched from locale', locale);
+    console.log('detectAndSelectCountry: attempting IP geolocation (primary)');
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 3000);
+    const res = await fetch('https://ipapi.co/json', { signal: controller.signal });
+    clearTimeout(timeout);
+    if (res && res.ok) {
+      const data = await res.json();
+      console.log('detectAndSelectCountry: ipapi result ->', data && (data.country_code || data.country));
+      if (data && (data.country_code || data.country)) {
+        if (setIfExists(data.country_code || data.country)) {
+          console.log('detectAndSelectCountry: matched from IP geolocation');
           return;
         }
-      } else {
-        console.log('detectAndSelectCountry: locale has no region part:', locale);
       }
     }
   } catch (e) {
-    console.error('detectAndSelectCountry error parsing navigator locales', e);
+    console.warn('detectAndSelectCountry: IP geolocation failed or timed out', e);
   }
-  // 3) Try timezone-based heuristic (e.g., Africa/Casablanca -> MA)
+
+
+  // 2) Try timezone-based heuristic (e.g., Africa/Casablanca -> MA)
   try {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     console.log('detectAndSelectCountry: timezone ->', tz);
@@ -285,22 +285,28 @@ async function detectAndSelectCountry() {
     console.error('detectAndSelectCountry timezone check failed', e);
   }
 
-  // 4) Final fallback: IP-based geolocation (short timeout)
+
+  // 3) Last resort: browser locale (navigator) to detect country codes (e.g. en-US -> US)
   try {
-    console.log('detectAndSelectCountry: attempting IP geolocation fallback');
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 3000);
-    const res = await fetch('https://ipapi.co/json', { signal: controller.signal });
-    clearTimeout(timeout);
-    if (res && res.ok) {
-      const data = await res.json();
-      console.log('detectAndSelectCountry: ipapi result ->', data && (data.country || data.country_code));
-      if (data && (data.country || data.country_code)) {
-        if (setIfExists(data.country || data.country_code)) return;
+    const locales = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || navigator.userLanguage];
+    console.log('detectAndSelectCountry: navigator locales ->', locales);
+    for (const locale of locales) {
+      if (!locale) continue;
+      const parts = locale.replace('_', '-').split('-');
+      // try country part (last segment) first
+      if (parts.length > 1) {
+        const possible = parts[parts.length - 1];
+        console.log('detectAndSelectCountry: checking locale', locale, '-> candidate', possible);
+        if (setIfExists(possible)) {
+          console.log('detectAndSelectCountry: matched from locale', locale);
+          return;
+        }
+      } else {
+        console.log('detectAndSelectCountry: locale has no region part:', locale);
       }
     }
   } catch (e) {
-    console.warn('detectAndSelectCountry: IP geolocation failed or timed out', e);
+    console.error('detectAndSelectCountry error parsing navigator locales', e);
   }
 
   console.log('detectAndSelectCountry: no match from any method; leaving default');
