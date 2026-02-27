@@ -172,6 +172,29 @@ async function detectAndSelectCountry() {
   // 0) Check URL params first for an explicit lang/locale override (e.g. ?lang=fr-FR or ?lang=FR)
   try {
     const urlParams = new URLSearchParams(window.location.search);
+    // Prefer explicit `country` param (2-letter code or full name)
+    const countryParam = urlParams.get('country');
+    if (countryParam) {
+      console.log('detectAndSelectCountry: found country param in URL ->', countryParam);
+      // try code first
+      if (setIfExists(countryParam)) {
+        console.log('detectAndSelectCountry: matched from URL country param (code)', countryParam);
+        return;
+      }
+      // try matching by country name (case-insensitive, partial)
+      const name = String(countryParam).trim().toLowerCase();
+      if (name) {
+        const optByName = Array.from(select.options).find(o => o.textContent.trim().toLowerCase().includes(name));
+        if (optByName) {
+          select.value = optByName.value;
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+          console.log('detectAndSelectCountry: matched from URL country param (name)', optByName.value, '-', optByName.textContent.trim());
+          return;
+        }
+      }
+
+    }
+    // fallback to lang/locale params if country not provided
     const langParam = urlParams.get('lang') || urlParams.get('locale') || urlParams.get('language');
     if (langParam) {
       console.log('detectAndSelectCountry: found lang param in URL ->', langParam);
@@ -234,8 +257,53 @@ async function detectAndSelectCountry() {
   } catch (e) {
     console.error('detectAndSelectCountry error parsing navigator locales', e);
   }
+  // 3) Try timezone-based heuristic (e.g., Africa/Casablanca -> MA)
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log('detectAndSelectCountry: timezone ->', tz);
+    if (tz) {
+      const tzLower = String(tz).toLowerCase();
+      // Quick match for Morocco
+      if (tzLower.includes('casablanca') || tzLower.includes('rab') || tzLower.includes('africa')) {
+        if (setIfExists('MA')) return;
+      }
+      // If timezone has a region like Europe/Paris -> try country code via known mapping
+      const tzParts = tz.split('/');
+      if (tzParts.length > 1) {
+        const region = tzParts[1];
+        // region might be a city; try to match by option text containing city name
+        const optByCity = Array.from(select.options).find(o => o.textContent.trim().toLowerCase().includes(region.toLowerCase()));
+        if (optByCity) {
+          select.value = optByCity.value;
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+          console.log('detectAndSelectCountry: matched from timezone city ->', optByCity.value, '-', optByCity.textContent.trim());
+          return;
+        }
+      }
+    }
+  } catch (e) {
+    console.error('detectAndSelectCountry timezone check failed', e);
+  }
 
-  console.log('detectAndSelectCountry: no match from navigator locales; leaving default');
+  // 4) Final fallback: IP-based geolocation (short timeout)
+  try {
+    console.log('detectAndSelectCountry: attempting IP geolocation fallback');
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 3000);
+    const res = await fetch('https://ipapi.co/json', { signal: controller.signal });
+    clearTimeout(timeout);
+    if (res && res.ok) {
+      const data = await res.json();
+      console.log('detectAndSelectCountry: ipapi result ->', data && (data.country || data.country_code));
+      if (data && (data.country || data.country_code)) {
+        if (setIfExists(data.country || data.country_code)) return;
+      }
+    }
+  } catch (e) {
+    console.warn('detectAndSelectCountry: IP geolocation failed or timed out', e);
+  }
+
+  console.log('detectAndSelectCountry: no match from any method; leaving default');
 }
 
 function showRewardAnimation() {
